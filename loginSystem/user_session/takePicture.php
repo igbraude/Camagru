@@ -2,6 +2,14 @@
 session_start();
 include("./Class.image.php");
 
+// function to encode the montage in base64
+function base64Image($path) {
+    $type = pathinfo($path, PATHINFO_EXTENSION);
+    $data = file_get_contents($path);
+    $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+    return $base64;
+}
+
 // function to resize img for html balise
 function imageResize($width, $height, $target) {
 
@@ -39,16 +47,23 @@ function resize_image($file, $w, $h, $crop=FALSE) {
     }
     $src = imagecreatefrompng($file);
     $dst = imagecreatetruecolor($newwidth, $newheight);
+    imagesavealpha($dst, true);
+
+    $trans_colour = imagecolorallocatealpha($dst, 0, 0, 0, 127);
+    imagefill($dst, 0, 0, $trans_colour);
+    
+    $red = imagecolorallocate($dst, 255, 0, 0);
+    imagefilledellipse($dst, 500, 500, $newwidth, $newheight, $red);
     imagecopyresampled($dst, $src, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
-    $black = imagecolorallocate($dst, 0, 0, 0);
-    imagecolortransparent($dst, $black);
+    //$black = imagecolorallocate($dst, 0, 0, 0);
+    //imagecolortransparent($dst, $black);
     return $dst;
 }
 
-$src = imagecreatefrompng("../image/hat.png");
+$src = imagecreatefrompng("../image/camera.png");
 if(isset($_POST['newPicture'])) {
     $dst = imagecreatefrompng($_POST['newPicture']);
-    $src = resize_image("../image/hat.png", 350, 350);
+    $src = resize_image("../image/cigarette.png", 350, 350);
     $width_dst = imagesx($dst);
     $height_dst = imagesy($dst);
     $width_src = imagesx($src);
@@ -64,6 +79,7 @@ if(isset($_POST['newPicture'])) {
     $info = exif_imagetype("../userImage/imageMontage.png");
     echo $info;
     echo '<img height="200px" width="200px" src="../userImage/imageMontage.png" alt="photoMontage">';
+    $_POST['newPicture'] = base64Image("../userImage/imageMontage.png");
 }
 
 ?>
