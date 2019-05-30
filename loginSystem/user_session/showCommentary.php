@@ -22,7 +22,6 @@ function getCommentaries() {
             array_push($commentaryObject, $com);
         }
     }
-
     return ($commentaryObject);
 }
 

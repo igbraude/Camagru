@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 include("./Class.image.php");
 
 // function to encode the montage in base64
@@ -25,6 +26,41 @@ function imageResize($width, $height, $target) {
 }
 
 //function to resize the image montage, maybe i can use it with some input and $_POST variable to make better montage
+function resize_imagejpeg($file, $w, $h, $crop=FALSE) {
+    list($width, $height) = getimagesize($file);
+    $r = $width / $height;
+    if ($crop) {
+        if ($width > $height) {
+            $width = ceil($width-($width*abs($r-$w/$h)));
+        } else {
+            $height = ceil($height-($height*abs($r-$w/$h)));
+        }
+        $newwidth = $w;
+        $newheight = $h;
+    } else {
+        if ($w/$h > $r) {
+            $newwidth = $h*$r;
+            $newheight = $h;
+        } else {
+            $newheight = $w/$r;
+            $newwidth = $w;
+        }
+    }
+    $src = imagecreatefromjpeg($file);
+    $dst = imagecreatetruecolor($newwidth, $newheight);
+    imagesavealpha($dst, true);
+
+    $trans_colour = imagecolorallocatealpha($dst, 0, 0, 0, 127);
+    imagefill($dst, 0, 0, $trans_colour);
+    
+    $red = imagecolorallocate($dst, 255, 0, 0);
+    imagefilledellipse($dst, 500, 500, $newwidth, $newheight, $red);
+    imagecopyresampled($dst, $src, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
+    //$black = imagecolorallocate($dst, 0, 0, 0);
+    //imagecolortransparent($dst, $black);
+    return $dst;
+}
+
 function resize_image($file, $w, $h, $crop=FALSE) {
     list($width, $height) = getimagesize($file);
     $r = $width / $height;
@@ -60,10 +96,10 @@ function resize_image($file, $w, $h, $crop=FALSE) {
     return $dst;
 }
 
-if(isset($_POST['newPicture'])) {
-    $dst = imagecreatefromjpeg($_POST['newPicture']);
-    $src = imagecreatefrompng($_POST['imgSelect']);
-    $src = resize_image($_POST['imgSelect'], 350, 350);
+if(isset($_POST['selectedImage'])) {
+    $dst = imagecreatefromjpeg("../userImage/imageMontage2.jpg");
+    $src = imagecreatefrompng($_POST['selectedImage']);
+    $src = resize_image($_POST['selectedImage'], 350, 350);
     $width_dst = imagesx($dst);
     $height_dst = imagesy($dst);
     $width_src = imagesx($src);
@@ -79,23 +115,48 @@ if(isset($_POST['newPicture'])) {
     $info = exif_imagetype("../userImage/imageMontage.jpg");
     echo $info;
     echo '<img height="200px" width="200px" src="../userImage/imageMontage.jpg" alt="photoMontage">';
-    $_POST['newPicture'] = base64Image("../userImage/imageMontage.jpg");
+    $_POST['uploadedImage'] = base64Image("../userImage/imageMontage.jpg");
 }
 
-if (isset($_POST['selectedImage'])) {
-    $disabled = null;
+$uploadOk = 0;
+if (isset($_POST['submit'])) {
+$target_dir = "uploads/";
+$target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
+$uploadOk = 1;
+$imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+
+if($imageFileType != "jpg" && $imageFileType != "jpeg") {
+    echo "Sorry, only JPG, JPEG files are allowed.";
+    $uploadOk = 0;
 }
 else {
-    $disabled = "disabled";
+if(isset($_POST["submit"])) {
+    $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+    if($check !== false) {
+        echo "File is an image - " . $check["mime"] . ".";
+        $uploadOk = 1;
+        move_uploaded_file($_FILES['fileToUpload']['tmp_name'], 'uploads/' . basename($_FILES['fileToUpload']['name']));
+        echo '<br>' . $_FILES['fileToUpload']['tmp_name'], 'uploads/' . basename($_FILES['fileToUpload']['name']);
+    } else {
+        echo "File is not an image.";
+        $uploadOk = 0;
+        }
+    } 
+}
 }
 
-echo 'Post <br>';
+if(isset($_POST['submit']) && $uploadOk == 1) {
+    $dst = imagecreatefromjpeg('uploads/' .basename($_FILES["fileToUpload"]["name"]));
+    $src = resize_imagejpeg('uploads/' .basename($_FILES["fileToUpload"]["name"]), 500, 500);
+    imagejpeg($dst, "../userImage/imageMontage2.jpg");
+    $info = exif_imagetype("../userImage/imageMontage2.jpg");
+    echo $info;
+    echo '<img height="200px" width="200px" src="../userImage/imageMontage.jpg" alt="photoMontage">';
+}
+
 print_r($_POST);
 echo '<br>Files <br>';
 print_r($_FILES);
-
-//echo $_FILES['fileToUpload']['error'];
-
 ?>
 
 <!DOCTYPE html>
@@ -127,11 +188,34 @@ print_r($_FILES);
 </header>
 
 
+<?php if (isset($_POST['selectedImage'])) {?>
+    <form class="newPic" action="takePicture.php" enctype="multipart/form-data" method="post">
+         <input type=hidden name="imagePath" value="<?php echo $_POST['uploadedImage'] ?>">
+         <input type="hidden" name="addImage" value="addImage">
+         <img width="500px" height="500px" src="../userImage/imageMontage.jpg" alt="cadre">
+         <a href="#" class="addPicture">Add image</a>
+    </form>
+    <script>
+    (() => {
+    const initElement = element => {
+        element = element.querySelector('.addPicture')
+        element.addEventListener("click", (event) => {
+        event.preventDefault()
+        -document.querySelector(".newPic").submit();
+        
+        })
+    }
+    Array.from(document.querySelectorAll('.newPic'))
+            .forEach(initElement)
+    })()
+    </script>
+<?php } else { ?>
+    <input type="hidden" name="uploadedPhoto" value="<?php echo $_FILES['fileToUpload']['tmp_name'], 'uploads/' . basename($_FILES['fileToUpload']['name']); ?>">
+    <img width="500px" height="500px" src="<?php echo 'uploads/' .basename($_FILES["fileToUpload"]["name"]); ?>" alt="cadre">
+<?php } ?>
+
 <form class="img" enctype="multipart/form-data" method="post">
-    <div id="my_camera">
-      <video width="500" height="500" id="video" controls>
-      </video>
-      <button type="submit" id="takePicButton" <?php if ($disabled != null) { echo $disabled; } ?>>Take photo</button>
+    Click on the montage you prefer
       <div class="montageImage">
         <input type="hidden" name="selectedImage" value="">
          <a href="#" class="imageMontage"><img width="50px" height="50px" src="../image/cadre.png" alt="cadre"></a>
@@ -142,112 +226,24 @@ print_r($_FILES);
          <a href="#" class="imageMontage"><img width="50px" height="50px" src="../image/load.png" alt="cadre"></a>
          <a href="#" class="imageMontage"><img width="50px" height="50px" src="../image/up.png" alt="cadre"></a>
       </div>
-    </div>
-    <canvas width="500" height="500" style="display:none;" id="canvas"></canvas>
 </form>
 
 <br>
+<?php if ($uploadOk == 0) { ?>
 
 <form class="upload" action="upload.php" method="post" enctype="multipart/form-data">
     Select image to upload:
     <input type="submit" value="UploadImage" name="submit" value="">
-    <input type="file" name="fileToUpload" id="fileToUpload" accept="image/jpeg" value>
+    <input type="file" name="fileToUpload" id="fileToUpload" accept="image/jpeg" value="">
 </form>
 
-<br>
-<form class="montage" enctype="multipart/form-data" method="post">
-    <div id="imgMontage">
-    <?php /*
-        <input type="hidden" name="newPicture">
-        <?php if (isset($_POST['submit']) && $_POST['submit'] == "UploadImage") {
-            echo '<img width="320ps" height="240px" id="uploadedImg" src="" alt="uploadedImg"><br>';
-        }
-        else { ?>
-        <img id="photo" alt="screenCapture"> <br>
+<?php } ?>
 
-        <?php } ?>
-        <input type="submit" value="UploadImage" name="submit">
-        <input type="file" value="fileToUpload" name="fileToUpload"/> */?>
-    <input type="hidden" name="newPicture" value="">
-    <input type="hidden" name="imgSelect" value="<?php echo $_POST['selectedImage'] ?>">
-    </form>
-    <?php if (isset($_POST['newPicture'])) {
-            echo '<form class="newPic" enctype="multipart/form-data" method="post">';
-            echo '<input type=hidden name="imagePath" value="'. $_POST['newPicture'] .'">';
-            echo '<input type="hidden" name="addImage" value="addImage">';
-            echo '<img height="500px" width="500px" src="'. $_POST['newPicture'] .'" id="photo"> <br>';
-            echo '<a href="#" class="addPicture">Add image</a>';
-            echo '</form>';
-        } ?>
-    </div>
-</form>
 
 
 <script type="text/javascript">
-(function() {
-  var width = 500;
-  var height = 500;
 
-  var streaming = false;
 
-  var video = null;
-  var canvas = null;
-  var photo = null;
-  var startbutton = null;
-
-  function startup() {
-      video = document.getElementById('video');
-      canvas = document.getElementById('canvas');
-      photo = document.getElementById('photo');
-      startbutton = document.getElementById('takePicButton');
-      navigator.mediaDevices.getUserMedia({video: true, audio: false})
-          .then(function(stream) {
-              video.srcObject = stream;
-              video.play();
-          })
-          .catch(function(err) {
-              console.log("An error occured: " + err);
-          }) ;
-          video.addEventListener('canplay', function(ev) {
-              if (!streaming) {
-                  canvas.setAttribute('width', width);
-                  canvas.setAttribute('height', height);
-                  streaming = true;
-              }
-          }, false) ;
-          takePicButton.addEventListener('click', function(ev) {
-              takepicture();
-              ev.preventDefault();
-          }, false) ;
-  }
-
-  function takepicture() {
-      var context = canvas.getContext('2d');
-      if (width && height) {
-          context.drawImage(video, 0, 0, width, height);
-          var data = canvas.toDataURL('image/jpeg');
-          document.querySelector('input[name="newPicture"]').value = data;
-          console.log(document.querySelector('input[name="imgSelect"]').value);
-          document.querySelector(".montage").submit();
-      }
-  }
-  window.addEventListener('load', startup, false);
-}) ();
-
-(() => {
-    const initElement = element => {
-        element = element.querySelector('.addPicture')
-        element.addEventListener("click", (event) => {
-        var data = canvas.toDataURL('image/jpeg');
-        event.preventDefault()
-        console.log(data)
-        document.querySelector(".newPic").submit();
-        
-        })
-    }
-    Array.from(document.querySelectorAll('.newPic'))
-            .forEach(initElement)
-})()
 
 image = document.getElementsByClassName("imageMontage")
 console.log(image.length);
@@ -255,11 +251,10 @@ for (var i = 0; i < image.length; i++) {
         image[i].addEventListener('click', function(event) {
         event.preventDefault()
         document.querySelector('input[name="selectedImage"]').value = event.target.getAttribute("src")
-        document.querySelector(".img").submit()
+        console.log(event.target.getAttribute("src"))
+       document.querySelector(".img").submit()
     }, false)
 }
-
-
 </script>
 
 </body>

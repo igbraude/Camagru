@@ -42,7 +42,7 @@ class Images {
             echo '<input type="hidden" name="img_id" value="'. $this->id .'">';
             echo '<input type="hidden" name="imgPath" value="'. $this->path .'">';
             echo '<input type="hidden" name="action" value="">';
-            echo '<div class="content"> <a href="http://localhost:8008/Archive/loginSystem/user_session/showCommentary.php" class="showImage"><img name="imgPath" src="'.$this->path.'" alt="'.$this->id.'" height="250" width="250"></a>';
+            echo '<div class="content"> <a href="./showCommentary.php" class="showImage"><img name="imgPath" src="'.$this->path.'" alt="'.$this->id.'" height="250" width="250"></a>';
             echo '<a href="#" class="img-delete">delete</a></div>';
             echo '</form>';
         }

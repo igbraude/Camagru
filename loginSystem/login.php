@@ -26,7 +26,6 @@
             {
                 $conn = NULL;
                 $_SESSION['username'] =  $_POST['username'];
-
                 header('location: session.php');
             }
             else {
