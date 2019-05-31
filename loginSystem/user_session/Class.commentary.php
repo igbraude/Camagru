@@ -69,6 +69,11 @@ class commentary {
             echo '<a href="#" class="comment-edit">edit</a></div>';
             echo '</form>';
         }
+        else {
+            echo '<form class="comment" method="post">';
+            echo '<div class="content"><p>'.$this->text.'</p>';
+            echo '</form>';
+        }
         echo "<br>";
     }
 }

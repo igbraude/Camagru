@@ -71,6 +71,7 @@ foreach(array_keys($_GET) as $session) {
                     <a href="profile.php" name="profile">Profile</a><br>
                     <a href="setting.php" name="settings">Settings</a><br>
                     <a href="./user_session/showImages.php" name="gallerie">Gallerie</a>
+                    <a href="./user_session/showImagesPublic.php" name="gallerie">Gallerie Public</a>
                 </div>
         </ul>
 </header>

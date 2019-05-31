@@ -37,15 +37,12 @@ class Images {
 
     public function displayImages() {
         include("../config.php");
-        if ($_SESSION['username'] == $this->username) {
-            echo '<form class="images" method="post">';
-            echo '<input type="hidden" name="img_id" value="'. $this->id .'">';
-            echo '<input type="hidden" name="imgPath" value="'. $this->path .'">';
-            echo '<input type="hidden" name="action" value="">';
-            echo '<div class="content"> <a href="./showCommentary.php" class="showImage"><img name="imgPath" src="'.$this->path.'" alt="'.$this->id.'" height="250" width="250"></a>';
-            echo '<a href="#" class="img-delete">delete</a></div>';
-            echo '</form>';
-        }
+        echo '<form class="images" method="post">';
+        echo '<input type="hidden" name="img_id" value="'. $this->id .'">';
+        echo '<input type="hidden" name="imgPath" value="'. $this->path .'">';
+        echo '<input type="hidden" name="action" value="">';
+        echo '<div class="content"> <a href="./showCommentary.php" class="showImage"><img name="imgPath" src="'.$this->path.'" alt="'.$this->id.'" height="250" width="250"></a>';
+        echo '</form>';
     }
 
     public function deleteImages() {

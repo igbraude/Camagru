@@ -3,8 +3,46 @@ session_start();
 
 include("./Class.image.php");
 
-if ($_FILES['fileToUpload']['error'] != 0) {
-    header ("location: takePicture.php");
+if (isset($_FILES['fileToUpload'])) {
+    if ($_FILES['fileToUpload']['error'] != 0) {
+        header ("location: takePicture.php");
+    }
+}
+
+$uploadOk = 0;
+if (isset($_POST['submit'])) {
+    $target_dir = "uploads/";
+    $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
+    $uploadOk = 1;
+    $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+    if($imageFileType != "jpg" && $imageFileType != "jpeg") {
+        echo "Sorry, only JPG, JPEG files are allowed.";
+        $uploadOk = 0;
+        header("location: takePicture.php");
+    }
+else {
+    if(isset($_POST["submit"])) {
+        $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+        if($check !== false) {
+            echo "File is an image - " . $check["mime"] . ".";
+            $uploadOk = 1;
+            move_uploaded_file($_FILES['fileToUpload']['tmp_name'], 'uploads/' . basename($_FILES['fileToUpload']['name']));
+            echo '<br>' . $_FILES['fileToUpload']['tmp_name'], 'uploads/' . basename($_FILES['fileToUpload']['name']);
+        } else {
+                echo "File is not an image.";
+                $uploadOk = 0;
+                header("location: takePicture.php");
+            }
+        } 
+    }
+}
+if(isset($_POST['submit']) && $uploadOk == 1) {
+    $dst = imagecreatefromjpeg('uploads/' .basename($_FILES["fileToUpload"]["name"]));
+    $src = resize_imagejpeg('uploads/' .basename($_FILES["fileToUpload"]["name"]), 500, 500);
+    imagejpeg($dst, "../userImage/imageMontage2.jpg");
+    $info = exif_imagetype("../userImage/imageMontage2.jpg");
+    echo $info;
+    echo '<img height="200px" width="200px" src="../userImage/imageMontage.jpg" alt="photoMontage">';
 }
 
 // function to encode the montage in base64
@@ -29,7 +67,7 @@ function imageResize($width, $height, $target) {
     return 'width="'. $width .'" height="' .$height .'"';
 }
 
-//function to resize the image montage, maybe i can use it with some input and $_POST variable to make better montage
+//function to resize the uploaded image
 function resize_imagejpeg($file, $w, $h, $crop=FALSE) {
     list($width, $height) = getimagesize($file);
     $r = $width / $height;
@@ -60,8 +98,6 @@ function resize_imagejpeg($file, $w, $h, $crop=FALSE) {
     $red = imagecolorallocate($dst, 255, 0, 0);
     imagefilledellipse($dst, 500, 500, $newwidth, $newheight, $red);
     imagecopyresampled($dst, $src, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
-    //$black = imagecolorallocate($dst, 0, 0, 0);
-    //imagecolortransparent($dst, $black);
     return $dst;
 }
 
@@ -167,42 +203,6 @@ if(isset($_POST['selectedImage'])) {
     echo $info;
     echo '<img height="200px" width="200px" src="../userImage/imageMontage.jpg" alt="photoMontage">';
     $_POST['uploadedImage'] = base64Image("../userImage/imageMontage.jpg");
-}
-
-$uploadOk = 0;
-if (isset($_POST['submit'])) {
-$target_dir = "uploads/";
-$target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
-$uploadOk = 1;
-$imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
-
-if($imageFileType != "jpg" && $imageFileType != "jpeg") {
-    echo "Sorry, only JPG, JPEG files are allowed.";
-    $uploadOk = 0;
-}
-else {
-if(isset($_POST["submit"])) {
-    $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
-    if($check !== false) {
-        echo "File is an image - " . $check["mime"] . ".";
-        $uploadOk = 1;
-        move_uploaded_file($_FILES['fileToUpload']['tmp_name'], 'uploads/' . basename($_FILES['fileToUpload']['name']));
-        echo '<br>' . $_FILES['fileToUpload']['tmp_name'], 'uploads/' . basename($_FILES['fileToUpload']['name']);
-    } else {
-        echo "File is not an image.";
-        $uploadOk = 0;
-        }
-    } 
-}
-}
-
-if(isset($_POST['submit']) && $uploadOk == 1) {
-    $dst = imagecreatefromjpeg('uploads/' .basename($_FILES["fileToUpload"]["name"]));
-    $src = resize_imagejpeg('uploads/' .basename($_FILES["fileToUpload"]["name"]), 500, 500);
-    imagejpeg($dst, "../userImage/imageMontage2.jpg");
-    $info = exif_imagetype("../userImage/imageMontage2.jpg");
-    echo $info;
-    echo '<img height="200px" width="200px" src="../userImage/imageMontage.jpg" alt="photoMontage">';
 }
 
 print_r($_POST);

@@ -126,7 +126,7 @@ if(isset($_POST['newPicture'])) {
     imagejpeg($dst, "../userImage/imageMontage.jpg");
     $info = exif_imagetype("../userImage/imageMontage.jpg");
     echo $info;
-    echo '<img height="200px" width="200px" src="../userImage/imageMontage.jpg" alt="photoMontage">';
+    echo '<img height="200px" width="200px" src="../userImage/imageMontage.jpg" alt="photoMontag e">';
     $_POST['newPicture'] = base64Image("../userImage/imageMontage.jpg");
 }
 
@@ -167,8 +167,8 @@ print_r($_FILES);
                 <div class="dropdownMenu" name="feature">
                     <p class="FeatureTitle">Feature<p>
                     <a href="../session.php" name="session">Home</a><br>
-                    <a href="profile.php" name="profile">Profile</a><br>
-                    <a href="setting.php" name="settings">Settings</a><br>
+                    <a href="../profile.php" name="profile">Profile</a><br>
+                    <a href="../setting.php" name="settings">Settings</a><br>
                     <a href="showImages.php" name="gallerie">Gallerie</a>
                 </div>
         </ul>
