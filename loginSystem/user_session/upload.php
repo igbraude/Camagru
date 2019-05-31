@@ -3,6 +3,10 @@ session_start();
 
 include("./Class.image.php");
 
+if ($_FILES['fileToUpload']['error'] != 0) {
+    header ("location: takePicture.php");
+}
+
 // function to encode the montage in base64
 function base64Image($path) {
     $type = pathinfo($path, PATHINFO_EXTENSION);
@@ -39,11 +43,11 @@ function resize_imagejpeg($file, $w, $h, $crop=FALSE) {
         $newheight = $h;
     } else {
         if ($w/$h > $r) {
-            $newwidth = $h*$r;
-            $newheight = $h;
+            $newwidth = 500;
+            $newheight = 500;
         } else {
-            $newheight = $w/$r;
-            $newwidth = $w;
+            $newheight = 500;
+            $newwidth = 500;
         }
     }
     $src = imagecreatefromjpeg($file);
@@ -99,7 +103,54 @@ function resize_image($file, $w, $h, $crop=FALSE) {
 if(isset($_POST['selectedImage'])) {
     $dst = imagecreatefromjpeg("../userImage/imageMontage2.jpg");
     $src = imagecreatefrompng($_POST['selectedImage']);
-    $src = resize_image($_POST['selectedImage'], 350, 350);
+    $dst = resize_imagejpeg("../userImage/imageMontage2.jpg", 500, 500);
+    if ($_POST['selectedImage'] == "../image/cigarette.png") {
+        $src = resize_image($_POST['selectedImage'], 150, 150);
+        //variable pour un montage plus precis a soustraire a $dst_x et $dst_y
+        $min_x = 250;
+        $min_y = 150;
+    }
+    else if ($_POST['selectedImage'] == "../image/cadre.png") {
+        $src = resize_image($_POST['selectedImage'], 480, 430);
+        //variable pour un montage plus precis a soustraire a $dst_x et $dst_y
+        $min_x = 12;
+        $min_y = 75;
+    }
+    else if ($_POST['selectedImage'] == "../image/camera.png") {
+        $src = resize_image($_POST['selectedImage'], 150, 150);
+        //variable pour un montage plus precis a soustraire a $dst_x et $dst_y
+        $min_x = 350;
+        $min_y = 350;
+    }
+    else if ($_POST['selectedImage'] == "../image/down.png") {
+        $src = resize_image($_POST['selectedImage'], 150, 150);
+        //variable pour un montage plus precis a soustraire a $dst_x et $dst_y
+        $min_x = 350;
+        $min_y = 350;
+    }
+    else if ($_POST['selectedImage'] == "../image/up.png") {
+        $src = resize_image($_POST['selectedImage'], 150, 150);
+        //variable pour un montage plus precis a soustraire a $dst_x et $dst_y
+        $min_x = 350;
+        $min_y = 350;
+    }
+    else if ($_POST['selectedImage'] == "../image/hat.png") {
+        $src = resize_image($_POST['selectedImage'], 200, 200);
+        //variable pour un montage plus precis a soustraire a $dst_x et $dst_y
+        $min_x = 150;
+        $min_y = 350;
+    }
+    else if ($_POST['selectedImage'] == "../image/load.png") {
+        $src = resize_image($_POST['selectedImage'], 150, 150);
+        //variable pour un montage plus precis a soustraire a $dst_x et $dst_y
+        $min_x = 350;
+        $min_y = 350;
+    }
+    else {
+        $src = resize_image($_POST['selectedImage'], 350, 350);
+        $min_x = 0;
+        $min_y = 0;
+    }
     $width_dst = imagesx($dst);
     $height_dst = imagesy($dst);
     $width_src = imagesx($src);
@@ -110,7 +161,7 @@ if(isset($_POST['selectedImage'])) {
     echo $height_dst, '<br>';
     $dst_x = $width_dst - $width_src;
     $dst_y =  $height_dst - $height_src;
-    imagecopy($dst, $src, $dst_x, $dst_y, 0, 0, $width_src, $height_src);
+    imagecopy($dst, $src, $dst_x - $min_x, $dst_y - $min_y, 0, 0, $width_src, $height_src);
     imagejpeg($dst, "../userImage/imageMontage.jpg");
     $info = exif_imagetype("../userImage/imageMontage.jpg");
     echo $info;
