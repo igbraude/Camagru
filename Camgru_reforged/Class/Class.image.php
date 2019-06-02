@@ -18,8 +18,8 @@ class Images {
                                          - Insert a new image in the database `Camagru`, in the table `image`
                          displayCommentary :
                                          - Display all the images.
-                                         - Create a show image button and a delete button for the user, when clicking on it the user see the commentaries like and dislike of the image.
-                                         - For the user, create a formulaire POST with 3 input, the image base64 encode, image id and action. 
+                                         - Create a show image button and a delete button for the user, when clicking on it the user see the commentaries, like and dislike of the image.
+                                         - Create a formulaire POST with 3 input, the image in base64, image id and action. 
     
         */
 
@@ -46,7 +46,7 @@ class Images {
     }
 
     public function addInDatabase() {
-        include("../config.php");
+        include("../config/database-setup.php");
         $query = sprintf("INSERT INTO `image` (`username`, `date_img`, `like`, `dislike`, `path`, `private`)
         VALUE (
             '%s', '%s', '%d', '%d', '%s', '%s')", $this->username, $this->date_img, $this->like, $this->dislike, $this->path, $this->private);
@@ -57,24 +57,25 @@ class Images {
     }
 
     public function displayImages() {
-        include("../config.php");
+        include("../config/database-setup.php");
         if ($_SESSION['username'] == $this->username) {
             echo '<form class="images" method="post">';
             echo '<input type="hidden" name="img_id" value="'. $this->id .'">';
             echo '<input type="hidden" name="imgPath" value="'. $this->path .'">';
+            echo '<div class="content"> <a href="./showCommentaries.php" class="showImage"><img name="imgPath" src="'.$this->path.'" alt="'.$this->id.'" height="250" width="250"></a>';
             echo '<input type="hidden" name="action" value="">';
-            echo '<div class="content"> <a href="./showCommentary.php" class="showImage"><img name="imgPath" src="'.$this->path.'" alt="'.$this->id.'" height="250" width="250"></a>';
             echo '<a href="#" class="img-delete">delete</a></div>';
             echo '</form>';
         }
     }
 
-    public function deleteImages() {
-
+    public function displayImagesPublic() {
+        include("../config/database-setup.php");
+            echo '<form class="images" method="post">';
+            echo '<input type="hidden" name="img_id" value="'. $this->id .'">';
+            echo '<input type="hidden" name="imgPath" value="'. $this->path .'">';
+            echo '<input type="hidden" name="action" value="">';
+            echo '<div class="content"> <a href="./showCommentaries.php" class="showImage"><img name="imgPath" src="'.$this->path.'" alt="'.$this->id.'" height="250" width="250"></a>';
+            echo '</form>';
     }
-
-    public function upgradeImageData() {
-
-    }
-
 }

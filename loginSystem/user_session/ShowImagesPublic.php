@@ -9,7 +9,7 @@ function getImages() {
     global $conn;
     $imgObject = [];
 
-    $query = sprintf('SELECT * FROM `image` WHERE `username`="%s"',$_SESSION['username']);
+    $query = sprintf('SELECT * FROM `image`');
     foreach($conn->query($query) as $row) {
         $img = new Images($row['image_id'], $row['username'], $row['path'], $row['like'], $row['dislike'], $row['private']);
         if ($imgObject == null) {
@@ -21,13 +21,6 @@ function getImages() {
     }
     return ($imgObject);
 }
-
-/* if (isset($_POST['action']) && $_POST['action'] == "delete") {
-    include("../config.php");
-    $query = sprintf("DELETE FROM `image` WHERE `image_id`=%d", $_POST['img_id']);
-    $stmt = $conn->prepare($query);
-    $stmt->execute();
-} */
 
 /*echo '<br><br>';
 
@@ -83,22 +76,12 @@ if (isset($_POST['newImage'])) {
 
 ?>
 
-<form method="post">
-    <button type="submit" class="newImage" name="newImage">Add new picture</button>
-</form>
-
 <script>
 
    (() => {
         const initElement = element => {
             // script when pressing delete button. It delete the pointed image.
             const content = element.querySelector('.content').innerHTML
-
-            element.querySelector('.img-delete').addEventListener('click', (event) => {
-                event.preventDefault()
-                element.querySelector('input[name="action"]').value = "delete"
-                element.submit()
-            })
             element.querySelector('.showImage').addEventListener('click', (event) => {
                 event.preventDefault()
                 element.querySelector('input[name="action"]').value = "showImage"

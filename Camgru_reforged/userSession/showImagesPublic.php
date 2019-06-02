@@ -1,15 +1,23 @@
 <?php
+
 /*
+
+    File showImagesPublic :
+        Display public image of everyone.
+        User can click on the image to see the commentary, like, dislike of the pointed one.
+
+*/
+
 session_start();
 
-include('Class.image.php');
-include('../config.php');
+include('../Class/Class.image.php');
+include('../config/database-setup.php');
 
 function getImages() {
     global $conn;
     $imgObject = [];
 
-    $query = sprintf('SELECT * FROM `image` WHERE `username`="%s"',$_SESSION['username']);
+    $query = sprintf('SELECT * FROM `image`');
     foreach($conn->query($query) as $row) {
         $img = new Images($row['image_id'], $row['username'], $row['path'], $row['like'], $row['dislike'], $row['private']);
         if ($imgObject == null) {
@@ -21,24 +29,6 @@ function getImages() {
     }
     return ($imgObject);
 }
-
-/* if (isset($_POST['action']) && $_POST['action'] == "delete") {
-    include("../config.php");
-    $query = sprintf("DELETE FROM `image` WHERE `image_id`=%d", $_POST['img_id']);
-    $stmt = $conn->prepare($query);
-    $stmt->execute();
-} */
-
-/*echo '<br><br>';
-
-echo 'Post variable: <br>';
-var_dump($_POST);
-echo '<br> Get variable: <br>';
-var_dump($_GET);
-echo '<br> FILES variable: <br>';
-var_dump($_FILES);
-echo '<br> Session variable: <br>';
-var_dump($_SESSION);*/
 
 ?>
 
@@ -61,10 +51,11 @@ var_dump($_SESSION);*/
                         </summary>
                 <div class="dropdownMenu" name="feature">
                     <p class="FeatureTitle">Feature<p>
-                    <a href="../session.php" name="session">Home</a><br>
+                    <a href="session.php" name="session">Home</a><br>
                     <a href="profile.php" name="profile">Profile</a><br>
                     <a href="setting.php" name="settings">Settings</a><br>
-                    <a href="showImages.php" name="gallerie">Gallerie</a>
+                    <a href="showImages.php" name="gallerie">Gallerie</a><br>
+                    <a href="showImagesPublic.php" name="gallerie">Gallerie Public</a>
                 </div>
         </ul>
 </header>
@@ -73,7 +64,7 @@ var_dump($_SESSION);*/
 $listImages = getImages();
 
 foreach($listImages as $img) {
-    $img->displayImages();
+    $img->displayImagesPublic();
 
 }
 
@@ -83,27 +74,16 @@ if (isset($_POST['newImage'])) {
 
 ?>
 
-<form method="post">
-    <button type="submit" class="newImage" name="newImage">Add new picture</button>
-</form>
-
 <script>
 
    (() => {
         const initElement = element => {
             // script when pressing delete button. It delete the pointed image.
             const content = element.querySelector('.content').innerHTML
-
-            element.querySelector('.img-delete').addEventListener('click', (event) => {
-                event.preventDefault()
-                element.querySelector('input[name="action"]').value = "delete"
-                element.submit()
-            })
             element.querySelector('.showImage').addEventListener('click', (event) => {
                 event.preventDefault()
                 element.querySelector('input[name="action"]').value = "showImage"
                 element.action = element.querySelector('.showImage').href
-                console.log(element);
                 element.submit()
             })
         }

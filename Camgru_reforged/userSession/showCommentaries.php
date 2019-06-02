@@ -1,11 +1,13 @@
 <?php
+
 /*
-// Show commentary
-session_start();
+    File ShowCommentaries :
+        Display the image pointed by the user.
+        Create new object for a commentary of an image and display it (commentary), loop foreach commentary.
+        User can create, edit, delete his own commentaries.
+*/
 
-include('Class.commentary.php');
-include('../config.php');
-
+include("./formPost/Post.showCommentaries.php");
 
 function getCommentaries() {
 
@@ -14,7 +16,7 @@ function getCommentaries() {
 
     $query = sprintf("SELECT * FROM `commentary` WHERE `image_id`=%d;", $_SESSION['image_id']);
     foreach($conn->query($query) as $row) {
-        $com = new commentary($row['message'], $row['username'], $row['image_id'], $row['commentary_id']);
+        $com = new Commentary($row['message'], $row['username'], $row['image_id'], $row['commentary_id']);
         if ($commentaryObject == null) {
             $commentaryObject = array($com);
         }
@@ -25,29 +27,8 @@ function getCommentaries() {
     return ($commentaryObject);
 }
 
-/* if (isset($_POST['action']) && $_POST['action'] == "delete") {
-    include("../config.php");
-    $query = sprintf("DELETE FROM `commentary` WHERE `commentary_id`=%d", $_POST['id']);
-    $stmt = $conn->prepare($query);
-    $stmt->execute();
-}
-
-if (isset($_POST['action']) && $_POST['action'] == "edit") {
-    include("../config.php");
-    $query = sprintf("UPDATE `commentary` SET `message`='%s' WHERE commentary_id=%d",$_POST['content'], $_POST['id']);
-    $stmt = $conn->prepare($query);
-    $stmt->execute();
-} */
-
- /* if (isset($_POST['img_id'])) {
-    $_SESSION['image_id'] = $_POST['img_id'];
-}
-if (isset($_POST['imgPath'])) {
-    $_SESSION['img_path'] = $_POST['imgPath'];
-} */
-
 ?>
-<?php /*
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -56,6 +37,27 @@ if (isset($_POST['imgPath'])) {
     <title>Camagru</title>
 <head>
 <body>
+
+<header  style="background-color:black;" class="header">
+        <ul>
+                <form method="get">
+                    <button style="background-color:black;color:white;" type="submit" class="logout" name="logout">Logout</button>
+                </form>
+                <li style="color:white;" class="user_choice" name="user_choice">
+                    <details class="user_choice_details" name="user_choice_details">
+                        <summary class="header_profile">Profile
+                        </summary>
+                <div class="dropdownMenu" name="feature">
+                    <p class="FeatureTitle">Feature<p>
+                    <a href="session.php" name="session">Home</a><br>
+                    <a href="profile.php" name="profile">Profile</a><br>
+                    <a href="setting.php" name="settings">Settings</a><br>
+                    <a href="showImages.php" name="gallerie">Gallerie</a><br>
+                    <a href="showImagesPublic.php" name="gallerie">Gallerie Public</a>
+                </div>
+        </ul>
+</header>
+
 <a href="showImages.php">Back to Gallery</a>
 <img alt="img" src="<?php echo $_SESSION['img_path'] ?>" width="200" height="200">
 <form method="post">
@@ -100,4 +102,4 @@ if (isset($_POST['imgPath'])) {
 </script>
 </body>
 
-</html> */
+</html>

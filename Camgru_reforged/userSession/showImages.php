@@ -1,9 +1,13 @@
 <?php
-/*
-session_start();
 
-include('Class.image.php');
-include('../config.php');
+/*
+    File showImages : 
+        Display image of the user only.
+        User can delete the image or click on it to show commentaries, like, dislike of the pointed image.
+
+*/
+
+include("./formPost/Post.showImages.php");
 
 function getImages() {
     global $conn;
@@ -21,24 +25,6 @@ function getImages() {
     }
     return ($imgObject);
 }
-
-/* if (isset($_POST['action']) && $_POST['action'] == "delete") {
-    include("../config.php");
-    $query = sprintf("DELETE FROM `image` WHERE `image_id`=%d", $_POST['img_id']);
-    $stmt = $conn->prepare($query);
-    $stmt->execute();
-} */
-
-/*echo '<br><br>';
-
-echo 'Post variable: <br>';
-var_dump($_POST);
-echo '<br> Get variable: <br>';
-var_dump($_GET);
-echo '<br> FILES variable: <br>';
-var_dump($_FILES);
-echo '<br> Session variable: <br>';
-var_dump($_SESSION);*/
 
 ?>
 
@@ -61,10 +47,11 @@ var_dump($_SESSION);*/
                         </summary>
                 <div class="dropdownMenu" name="feature">
                     <p class="FeatureTitle">Feature<p>
-                    <a href="../session.php" name="session">Home</a><br>
+                    <a href="session.php" name="session">Home</a><br>
                     <a href="profile.php" name="profile">Profile</a><br>
                     <a href="setting.php" name="settings">Settings</a><br>
-                    <a href="showImages.php" name="gallerie">Gallerie</a>
+                    <a href="showImages.php" name="gallerie">Gallerie</a><br>
+                    <a href="showImagesPublic.php" name="gallerie">Gallerie Public</a>
                 </div>
         </ul>
 </header>
@@ -77,13 +64,9 @@ foreach($listImages as $img) {
 
 }
 
-if (isset($_POST['newImage'])) {
-    header('location: takePicture.php');
-}
-
 ?>
 
-<form method="post">
+<form method="get" action="takePicture.php">
     <button type="submit" class="newImage" name="newImage">Add new picture</button>
 </form>
 

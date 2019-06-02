@@ -51,7 +51,7 @@ public function __toString() {
 // Add commentary
 
 public function addInDatabase() {
-    include("../database/config.php");
+    include("../config/database-setup.php");
     $query = sprintf( "INSERT INTO commentary (username, date_comm, image_id, `message`)
     VALUES ('%s', '%s', '%d', '%s')", $this->username, $this->dateTime, $this->image_id, $this->text);
     $stmt = $conn->prepare($query);
@@ -62,7 +62,7 @@ public function addInDatabase() {
 // Upgrade commentary
 
 public function upgradeCommentary() {
-    include("../database/config.php");
+    include("../config/database-setup.php");
     $query = sprintf("UPDATE `commentary` SET `message`='%s' WHERE commentary_id=%d",$_POST['content'], $_POST['id']);
     $stmt = $conn->prepare($query);
     $stmt->execute();
@@ -72,7 +72,7 @@ public function upgradeCommentary() {
 
 public function deleteCommentary() {
     if (isset($_POST['deleteCommentary'])) {
-        include("../databaseconfig.php");
+        include("../config/database-setup.php");
         $query = sprintf("DELETE FROM `commentary` WHERE `commentary_id`=%d", $_POST['deleteCommentary']);
         $stmt = $conn->prepare($query);
         $stmt->execute();
@@ -80,7 +80,7 @@ public function deleteCommentary() {
 }
 
 public function displayCommentaries() {
-    include("../database/config.php");
+    include("../config/database-setup.php");
     if ($_SESSION['username'] == $this->username) {
         echo '<form class="comment" method="post">';
         echo '<input type="hidden" name="id" value="'. $this->id .'">';

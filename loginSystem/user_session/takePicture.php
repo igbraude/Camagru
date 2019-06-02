@@ -1,17 +1,17 @@
 <?php
-session_start();
-include("./Class.image.php");
+/*session_start();
+include("./Class.image.php"); */
 
 // function to encode the montage in base64
-function base64Image($path) {
+/*function base64Image($path) {
     $type = pathinfo($path, PATHINFO_EXTENSION);
     $data = file_get_contents($path);
     $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
     return $base64;
-}
+} */
 
 // function to resize img for html balise
-function imageResize($width, $height, $target) {
+/*function imageResize($width, $height, $target) {
 
     if ($width > $height) {
     $percentage = ($target / $width);
@@ -58,12 +58,60 @@ function resize_image($file, $w, $h, $crop=FALSE) {
     //$black = imagecolorallocate($dst, 0, 0, 0);
     //imagecolortransparent($dst, $black);
     return $dst;
-}
+} */
 
-if(isset($_POST['newPicture'])) {
+/*if(isset($_POST['newPicture'])) {
     $dst = imagecreatefromjpeg($_POST['newPicture']);
     $src = imagecreatefrompng($_POST['imgSelect']);
-    $src = resize_image($_POST['imgSelect'], 350, 350);
+
+    if ($_POST['imgSelect'] == "../image/cigarette.png") {
+        $src = resize_image($_POST['imgSelect'], 150, 150);
+        //variable pour un montage plus precis a soustraire a $dst_x et $dst_y
+        $min_x = 250;
+        $min_y = 150;
+    }
+    else if ($_POST['imgSelect'] == "../image/cadre.png") {
+        $src = resize_image($_POST['imgSelect'], 480, 430);
+        //variable pour un montage plus precis a soustraire a $dst_x et $dst_y
+        $min_x = 12;
+        $min_y = 75;
+    }
+    else if ($_POST['imgSelect'] == "../image/camera.png") {
+        $src = resize_image($_POST['imgSelect'], 150, 150);
+        //variable pour un montage plus precis a soustraire a $dst_x et $dst_y
+        $min_x = 350;
+        $min_y = 350;
+    }
+    else if ($_POST['imgSelect'] == "../image/down.png") {
+        $src = resize_image($_POST['imgSelect'], 150, 150);
+        //variable pour un montage plus precis a soustraire a $dst_x et $dst_y
+        $min_x = 350;
+        $min_y = 350;
+    }
+    else if ($_POST['imgSelect'] == "../image/up.png") {
+        $src = resize_image($_POST['imgSelect'], 150, 150);
+        //variable pour un montage plus precis a soustraire a $dst_x et $dst_y
+        $min_x = 350;
+        $min_y = 350;
+    }
+    else if ($_POST['imgSelect'] == "../image/hat.png") {
+        $src = resize_image($_POST['imgSelect'], 200, 200);
+        //variable pour un montage plus precis a soustraire a $dst_x et $dst_y
+        $min_x = 150;
+        $min_y = 350;
+    }
+    else if ($_POST['imgSelect'] == "../image/load.png") {
+        $src = resize_image($_POST['imgSelect'], 150, 150);
+        //variable pour un montage plus precis a soustraire a $dst_x et $dst_y
+        $min_x = 350;
+        $min_y = 350;
+    }
+    else {
+        $src = resize_image($_POST['imgSelect'], 350, 350);
+        $min_x = 0;
+        $min_y = 0;
+    }
+
     $width_dst = imagesx($dst);
     $height_dst = imagesy($dst);
     $width_src = imagesx($src);
@@ -74,11 +122,11 @@ if(isset($_POST['newPicture'])) {
     echo $height_dst, '<br>';
     $dst_x = $width_dst - $width_src;
     $dst_y =  $height_dst - $height_src;
-    imagecopy($dst, $src, $dst_x, $dst_y, 0, 0, $width_src, $height_src);
+    imagecopy($dst, $src, $dst_x - $min_x, $dst_y - $min_y, 0, 0, $width_src, $height_src);
     imagejpeg($dst, "../userImage/imageMontage.jpg");
     $info = exif_imagetype("../userImage/imageMontage.jpg");
     echo $info;
-    echo '<img height="200px" width="200px" src="../userImage/imageMontage.jpg" alt="photoMontage">';
+    echo '<img height="200px" width="200px" src="../userImage/imageMontage.jpg" alt="photoMontag e">';
     $_POST['newPicture'] = base64Image("../userImage/imageMontage.jpg");
 }
 
@@ -87,16 +135,16 @@ if (isset($_POST['selectedImage'])) {
 }
 else {
     $disabled = "disabled";
-}
+} */
 
-echo 'Post <br>';
+/*echo 'Post <br>';
 print_r($_POST);
 echo '<br>Files <br>';
-print_r($_FILES);
+print_r($_FILES); */
 
 //echo $_FILES['fileToUpload']['error'];
 
-?>
+/*?>
 
 <!DOCTYPE html>
 <html>
@@ -119,8 +167,8 @@ print_r($_FILES);
                 <div class="dropdownMenu" name="feature">
                     <p class="FeatureTitle">Feature<p>
                     <a href="../session.php" name="session">Home</a><br>
-                    <a href="profile.php" name="profile">Profile</a><br>
-                    <a href="setting.php" name="settings">Settings</a><br>
+                    <a href="../profile.php" name="profile">Profile</a><br>
+                    <a href="../setting.php" name="settings">Settings</a><br>
                     <a href="showImages.php" name="gallerie">Gallerie</a>
                 </div>
         </ul>
@@ -150,24 +198,13 @@ print_r($_FILES);
 
 <form class="upload" action="upload.php" method="post" enctype="multipart/form-data">
     Select image to upload:
-    <input type="submit" value="UploadImage" name="submit" value="">
     <input type="file" name="fileToUpload" id="fileToUpload" accept="image/jpeg" value>
+    <input type="submit" value="UploadImage" name="submit" value="">
 </form>
 
 <br>
 <form class="montage" enctype="multipart/form-data" method="post">
     <div id="imgMontage">
-    <?php /*
-        <input type="hidden" name="newPicture">
-        <?php if (isset($_POST['submit']) && $_POST['submit'] == "UploadImage") {
-            echo '<img width="320ps" height="240px" id="uploadedImg" src="" alt="uploadedImg"><br>';
-        }
-        else { ?>
-        <img id="photo" alt="screenCapture"> <br>
-
-        <?php } ?>
-        <input type="submit" value="UploadImage" name="submit">
-        <input type="file" value="fileToUpload" name="fileToUpload"/> */?>
     <input type="hidden" name="newPicture" value="">
     <input type="hidden" name="imgSelect" value="<?php echo $_POST['selectedImage'] ?>">
     </form>
@@ -259,6 +296,8 @@ for (var i = 0; i < image.length; i++) {
     }, false)
 }
 
+upload = document.getElementsByClassName("upload")
+console.log(upload)
 
 </script>
 

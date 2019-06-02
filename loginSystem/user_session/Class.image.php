@@ -1,5 +1,5 @@
 <?php
-
+/*
 class Images {
     public $image_id;
     public $username;
@@ -36,15 +36,12 @@ class Images {
 
     public function displayImages() {
         include("../config.php");
-        if ($_SESSION['username'] == $this->username) {
-            echo '<form class="images" method="post">';
-            echo '<input type="hidden" name="img_id" value="'. $this->id .'">';
-            echo '<input type="hidden" name="imgPath" value="'. $this->path .'">';
-            echo '<input type="hidden" name="action" value="">';
-            echo '<div class="content"> <a href="./showCommentary.php" class="showImage"><img name="imgPath" src="'.$this->path.'" alt="'.$this->id.'" height="250" width="250"></a>';
-            echo '<a href="#" class="img-delete">delete</a></div>';
-            echo '</form>';
-        }
+        echo '<form class="images" method="post">';
+        echo '<input type="hidden" name="img_id" value="'. $this->id .'">';
+        echo '<input type="hidden" name="imgPath" value="'. $this->path .'">';
+        echo '<input type="hidden" name="action" value="">';
+        echo '<div class="content"> <a href="./showCommentary.php" class="showImage"><img name="imgPath" src="'.$this->path.'" alt="'.$this->id.'" height="250" width="250"></a>';
+        echo '</form>';
     }
 
     public function deleteImages() {
@@ -57,10 +54,10 @@ class Images {
 
 }
 
-include('../config.php');
+/* include('../config.php');
 
 if(isset($_POST['addImage'])) {
     $img = new Images(0, $_SESSION['username'],$_POST['imagePath'], 0, 0, 'N');
     $img->addInDatabase();
-}
+} */
 ?>

@@ -1,6 +1,6 @@
 <?php
 
-class commentary {
+/* class commentary {
 
     // variables of commentary tables columns
     public $id;
@@ -69,11 +69,16 @@ class commentary {
             echo '<a href="#" class="comment-edit">edit</a></div>';
             echo '</form>';
         }
+        else {
+            echo '<form class="comment" method="post">';
+            echo '<div class="content"><p>'.$this->text.'</p>';
+            echo '</form>';
+        }
         echo "<br>";
     }
 }
 
-include('../config.php');
+/* include('../config.php');
 
 if(isset($_POST['postCommentary'])) {
     $com = new commentary($_POST['commentaryField'], $_SESSION['username'], $_SESSION['image_id']);
@@ -85,7 +90,7 @@ if(isset($_POST['upgradeCommentary'])) {
     $query = sprintf("UPDATE FROM `commentary` WHERE `commentary_id`=%d", $_POST['commentary']);
     $stmt = $conn->prepare($query);
     $stmt->execute();
-}
+} */
 
 /*foreach(array_keys($_POST) as $session) {
     echo $session . "<br>";
