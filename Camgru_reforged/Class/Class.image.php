@@ -1,6 +1,28 @@
 <?php
 
 class Images {
+
+        /* 
+            DOC ==>
+
+        This class image is made to SEARCH, INSERT, DELETE or DISPLAY image in database.
+        An image is made with the webcam and upload 
+        magic function --> 
+                        __construct image we need :
+                                         - client username
+                                         - image in base 64, need to encode it
+                                         - like ans dislike in the image
+                                         - private or public image
+        public function -->
+                         addInDatabase :
+                                         - Insert a new image in the database `Camagru`, in the table `image`
+                         displayCommentary :
+                                         - Display all the images.
+                                         - Create a show image button and a delete button for the user, when clicking on it the user see the commentaries like and dislike of the image.
+                                         - For the user, create a formulaire POST with 3 input, the image base64 encode, image id and action. 
+    
+        */
+
     public $image_id;
     public $username;
     public $date_img;
@@ -56,11 +78,3 @@ class Images {
     }
 
 }
-
-include('../config.php');
-
-if(isset($_POST['addImage'])) {
-    $img = new Images(0, $_SESSION['username'],$_POST['imagePath'], 0, 0, 'N');
-    $img->addInDatabase();
-}
-?>
