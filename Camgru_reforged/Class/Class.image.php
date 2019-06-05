@@ -75,12 +75,13 @@ class Images {
 
     public function displayImagesPublic() {
         include("../config/database-setup.php");
+
             echo '<form class="images" method="post">';
             echo '<input type="hidden" name="img_id" value="'. $this->id .'">';
             echo '<input type="hidden" name="imgPath" value="'. $this->path .'">';
             echo '<input type="hidden" name="action" value="">';
             echo '<input type="hidden" name="Gallery" value="Public">';
-            echo '<div class="content"> <a href="./showCommentaries.php" class="showImage"><img name="imgPath" src="'.$this->path.'" alt="'.$this->id.'" height="250" width="250"></a>';
-            echo '</form>';
+            echo '<div class="content"><a href="./showCommentaries.php" class="showImage"><img name="imgPath" src="'.$this->path.'" alt="'.$this->id.'" height="250" width="250"></a>';
+            echo '</div></form>';
     }
 }

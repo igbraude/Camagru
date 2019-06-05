@@ -118,17 +118,6 @@ html{
         margin: 0 auto 32px;
     }
 
-    .form-log-in-with-email:after{
-        bottom: -80px;
-        left: 50%;
-        margin-left: -25px;
-    }
-
-    .form-sign-in-with-social{
-        margin-top: 60px;
-    }
-
-}
 
 @media (max-width: 600px) {
 

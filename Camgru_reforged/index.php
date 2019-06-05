@@ -13,6 +13,8 @@ $_SESSION['pageStore'] = "index.php";
 
 <link rel="stylesheet" href="header-login-signup.css">
 <link href='http://fonts.googleapis.com/css?family=Cookie' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
 
 </head>
 
@@ -31,4 +33,5 @@ $_SESSION['pageStore'] = "index.php";
 </div>
 
 </header>
+
 </html>

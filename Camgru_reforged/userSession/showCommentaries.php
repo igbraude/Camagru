@@ -26,6 +26,7 @@ function getCommentaries() {
     }
     return ($commentaryObject);
 }
+var_dump($_POST);
 
 ?>
 
@@ -43,7 +44,6 @@ function getCommentaries() {
 
 <title>User Dropdown Header</title>
 
-<link rel="stylesheet" href="css/demo.css">
 <link rel="stylesheet" href="css/header-user-dropdown.css">
 <link href='http://fonts.googleapis.com/css?family=Cookie' rel='stylesheet' type='text/css'>
 

@@ -46,9 +46,10 @@ function getImages() {
 
 <title>User Dropdown Header</title>
 
-<link rel="stylesheet" href="css/demo.css">
+
 <link rel="stylesheet" href="css/header-user-dropdown.css">
 <link href='http://fonts.googleapis.com/css?family=Cookie' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
 
 </head>
@@ -72,20 +73,30 @@ function getImages() {
 </div>
 
 </header>
+
+<div class="row">
 <?php
-
+$i = 0;
 $listImages = getImages();
-
 foreach($listImages as $img) {
+    echo '<div class="col-sm-3">';
     $img->displayImagesPublic();
+    echo '</div>';
+    $i++;
+    if ($i % 3 == 0) {
+        echo '<div class="w-100"></div>';
+    }
 
 }
-
+?>
+</div>
+<?php
 if (isset($_POST['newImage'])) {
     header('location: takePicture.php');
 }
 
 ?>
+</div>
 
 <script>
 
