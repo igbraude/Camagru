@@ -60,11 +60,15 @@ class Images {
         include("../config/database-setup.php");
         if ($_SESSION['username'] == $this->username) {
             echo '<form class="images" method="post">';
+            echo '<div class="responsive">';
+            echo '<div class="gallery"';
             echo '<input type="hidden" name="img_id" value="'. $this->id .'">';
             echo '<input type="hidden" name="imgPath" value="'. $this->path .'">';
+            echo '<input type="hidden" name="Gallery" value="public">';
             echo '<div class="content"> <a href="./showCommentaries.php" class="showImage"><img name="imgPath" src="'.$this->path.'" alt="'.$this->id.'" height="250" width="250"></a>';
             echo '<input type="hidden" name="action" value="">';
             echo '<a href="#" class="img-delete">delete</a></div>';
+            echo '</div></div>';
             echo '</form>';
         }
     }
@@ -75,6 +79,7 @@ class Images {
             echo '<input type="hidden" name="img_id" value="'. $this->id .'">';
             echo '<input type="hidden" name="imgPath" value="'. $this->path .'">';
             echo '<input type="hidden" name="action" value="">';
+            echo '<input type="hidden" name="Gallery" value="Public">';
             echo '<div class="content"> <a href="./showCommentaries.php" class="showImage"><img name="imgPath" src="'.$this->path.'" alt="'.$this->id.'" height="250" width="250"></a>';
             echo '</form>';
     }

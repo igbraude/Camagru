@@ -81,15 +81,15 @@ public function deleteCommentary() {
 
 public function displayCommentaries() {
     include("../config/database-setup.php");
-    if ($_SESSION['username'] == $this->username) {
         echo '<form class="comment" method="post">';
         echo '<input type="hidden" name="id" value="'. $this->id .'">';
         echo '<input type="hidden" name="action" value="">';
         echo '<div class="content"><p>'. $this->text .'</p>';
+        if ($_SESSION['username'] == $this->username) {
         echo '<a href="#" class="comment-delete">delete</a> |';
         echo '<a href="#" class="comment-edit">edit</a></div>';
-        echo '</form>';
         }
+        echo '</form>';
     echo "<br>";
     }
 }

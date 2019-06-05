@@ -25,42 +25,62 @@ include("./formPost/Post.login.php");
 <head>
 
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Camagru</title>
+
+    <link rel="stylesheet" href="css/header-login-signup.css">
+    <link rel="stylesheet" href="css/form-login.css">
+	<link href='http://fonts.googleapis.com/css?family=Cookie' rel='stylesheet' type='text/css'>
 
 </head>
 
 <body>
-    <div>
-        <div>
-            <div>
-                <form method="post">
-                    <p>Signin to continue</p>
-                    
-                    <div >
-                        <label>Username</label>
-                        <input type="username" name="username"
-                        required>
-                    </div>
 
-                    <div>
-                        <label>Password</label>
-                        <input type="password" name="password"
-                        required>
-                    </div>
+<header class="header-login-signup">
 
-                    <button type="submit" name="signIn">Sign in</button>
-                    <div>
-                        Don't have an account ?<a href="register.php">Register</a>
-                    </div>
-                    <div>
-                        Forgot Password ?<a href="register.php">here</a>
-                    </div>
+<div class="header-limiter">
 
-                </form>
-            </div>
-        </div>
-    </div>
+    <h1><a href="#">Camagru</a></h1>
+
+    <ul>
+        <li><a href="#">Forgot Password ?</a></li>
+        <li><a href="register.php">Sign up</a></li>
+    </ul>
+
 </div>
+
+</header>
+<form method="post">
+<div class="form-log-in-with-email">
+
+<div class="form-white-background">
+
+    <div class="form-title-row">
+        <h1>Log in</h1>
+    </div>
+
+    <div class="form-row">
+        <label>
+            <span>Username</span>
+            <input type="username" name="username" requiered>
+        </label>
+    </div>
+
+    <div class="form-row">
+        <label>
+            <span>Password</span>
+            <input type="password" name="password" required>
+        </label>
+    </div>
+
+    <div class="form-row">
+        <button type="submit" name="signIn">Log in</button>
+    </div>
+
+</div>
+</div>
+<form>
+
 </body>
 </html>

@@ -11,54 +11,81 @@ if(isset($_SESSION['login_id'])) {
 ?>
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width,initial-scale=1">
-        <title>Register</title>
-    </head>
-    <body>
-        <div>
-            <div>
-                <div>
-                    <div>
-                        <form method="post" oninput="validatePassword()">
-                            <p>Let's create your account</p>
+<head>
 
-                            <div>
-                                <label>Username</label>
-                                <input type="text" name="username"
-                                required>
-                            </div>
+    <meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Camagru</title>
 
-                            <div>
-                                <label>Email</label>
-                                <input type="email" name="email"
-                                required>
-                            </div>
+    <link rel="stylesheet" href="css/form-register.css">
+	<link rel="stylesheet" href="css/header-login-signup.css">
+	<link href='http://fonts.googleapis.com/css?family=Cookie' rel='stylesheet' type='text/css'>
 
-                            <div>
-                                <label>Password</label>
-                                <input type="password" name="newPassword" id="newPass"
-                                required>
-                            </div>
+</head>
 
-                            <div>
-                                <label>Confirm password</label>
-                                <input type="password" name="confirmPassword" id="confirmPass"
-                                required>
-                            </div>
+<body>
 
-                            <button name="signUp">Sign Up</button>
-                            <div class="text-foot">
-                                Already have an account ?
-                                <a href="login.php">Login</a>
-                            </div>
+<header class="header-login-signup">
 
-                        </form>
+<div class="header-limiter">
+
+    <h1><a href="#">Camagru</a></h1>
+
+    <ul>
+        <li><a href="#">Forgot Password ?</a></li>
+        <li><a href="login.php">Sign in</a></li>
+    </ul>
+
+</div>
+
+</header>
+<body>
+<form class="form-register" method="post" oninput="validatePassword()">
+
+            <div class="form-register-with-email">
+
+                <div class="form-white-background">
+
+                    <div class="form-title-row">
+                        <h1>Create an account</h1>
                     </div>
+
+                    <div class="form-row">
+                        <label>
+                            <span>Name</span>
+                            <input type="text" name="username" required>
+                        </label>
+                    </div>
+
+                    <div class="form-row">
+                        <label>
+                            <span>Email</span>
+                            <input type="email" name="email" required>
+                        </label>
+                    </div>
+
+                    <div class="form-row">
+                        <label>
+                            <span>Password</span>
+                            <input type="password" name="newPassword" =id="newPass" required>
+                        </label>
+                    </div>
+
+                    <div class="form-row">
+                        <label>
+                            <span>Confirm Password</span>
+                            <input type="password" name="confirmPassword" id="confirmPass" required>
+                        </label>
+                    </div>
+
+                    <div class="form-row">
+                        <button type="submit" name="signUp" action="./login.php">Register</button>
+                    </div>
+
                 </div>
-            </div>
-        </div>
+
+        </form>
         <script type="text/javascript">
             function validatePassword() {
                 if(newPass.value != confirmPass.value) {

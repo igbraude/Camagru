@@ -18,45 +18,39 @@ if (isset($_GET['takeNewPicture'])) {
     <meta charset="utf-8">
 
     <title>Camagru</title>
+    <head>
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>User Dropdown Header</title>
+
+<link rel="stylesheet" href="css/demo.css">
+<link rel="stylesheet" href="css/header-user-dropdown.css">
+<link href='http://fonts.googleapis.com/css?family=Cookie' rel='stylesheet' type='text/css'>
+
+
 </head>
 
 <body>
-    <header style="background-color:black;" class="header">
-        <ul>
-                <form method="get">
-                    <button style="background-color:black;color:white;" type="submit" class="logout" name="logout">Logout</button>
-                </form>
-                <li style="color:white;" class="user_choice" name="user_choice">
-                    <details class="user_choice_details" name="user_choice_details">
-                        <summary class="header_profile">Profile
-                        </summary>
-                <div class="dropdownMenu" name="feature">
-                    <p class="FeatureTitle">Feature<p>
-                    <a href="session.php" name="session">Home</a><br>
-                    <a href="profile.php" name="profile">Profile</a><br>
-                    <a href="setting.php" name="settings">Settings</a><br>
-                    <a href="showImages.php" name="gallerie">Gallerie</a><br>
-                    <a href="showImagesPublic.php" name="gallerie">Gallerie Public</a>
-                </div>
-        </ul>
-</header>
 
-<div class="container">
-    <div style="" class="contained">Here will be the gallerie
-    <form method="get">
-        <button type="submit" name="takeNewPicture" class="button-new-picture">Take a new picture</button>
-    </form>
-    <aside style="width:25%;float:right;text-align:right;" class="side-container">
-        <div class="side-article-author">Article author</div>
-    </div>
-    </aside>
+<header class="header-user-dropdown">
+
+<div class="header-limiter">
+    <h1><a href="./session.php">Camagru</a></h1>
+
+    <nav>
+        <a href="./showImages.php">My Gallery</a>
+        <a href="./showImagesPublic.php">Public Gallery</a>
+        <a href="./takePicture.php">Take Picture</a>
+        <a href="./setting.php">Settings</a>
+        <input type="hidden" name="logout" value="">
+        <a href="./logout.php">Logout</a>
+
+    </nav>
 </div>
 
-<footer class="footer">
-    <div style="background-color: black;color:white;" class="site-footer--container">
-        <p>Footer</p>
-    </div>
-</footer>
-
+</header>
 </body>
 </html>
