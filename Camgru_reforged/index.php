@@ -22,7 +22,6 @@ $_SESSION['pageStore'] = "index.php";
 <header class="header-login-signup">
 
 <div class="header-limiter">
-
     <h1><a href="#">Camagru</a></h1>
 
     <ul>

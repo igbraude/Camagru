@@ -40,8 +40,8 @@ include("./formPost/Post.takePicture.php");
     <h1><a href="./session.php">Camagru</a></h1>
 
     <nav>
-        <a href="./showImages.php">My Gallery</a>
-        <a href="./showImagesPublic.php">Public Gallery</a>
+        <a href="./showImages.php?page=1">My Gallery</a>
+        <a href="./showImagesPublic.php?page=1">Public Gallery</a>
         <a href="./takePicture.php">Take Picture</a>
         <a href="./setting.php">Settings</a>
         <input type="hidden" name="logout" value="">

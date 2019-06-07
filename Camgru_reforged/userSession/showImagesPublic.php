@@ -16,8 +16,15 @@ include('../config/database-setup.php');
 function getImages() {
     global $conn;
     $imgObject = [];
+    global $page;
+    if (isset($_GET['page'])) {
+        $page = intval($_GET['page']);
+        if ($page <= 1) {
+            $page = 1;
+        }
+    }
 
-    $query = sprintf('SELECT * FROM `image`');
+    $query = sprintf('SELECT * FROM `image` LIMIT 6 OFFSET '. (($page - 1) * 6));
     foreach($conn->query($query) as $row) {
         $img = new Images($row['image_id'], $row['username'], $row['path'], $row['like'], $row['dislike'], $row['private']);
         if ($imgObject == null) {
@@ -29,6 +36,8 @@ function getImages() {
     }
     return ($imgObject);
 }
+
+var_dump($_GET);
 
 ?>
 
@@ -62,8 +71,8 @@ function getImages() {
     <h1><a href="./session.php">Camagru</a></h1>
 
     <nav>
-        <a href="./showImages.php">My Gallery</a>
-        <a href="./showImagesPublic.php">Public Gallery</a>
+        <a href="./showImages.php?page=1">My Gallery</a>
+        <a href="./showImagesPublic.php?page=1">Public Gallery</a>
         <a href="./takePicture.php">Take Picture</a>
         <a href="./setting.php">Settings</a>
         <input type="hidden" name="logout" value="">
@@ -78,6 +87,7 @@ function getImages() {
 <?php
 $i = 0;
 $listImages = getImages();
+
 foreach($listImages as $img) {
     echo '<div class="col-sm-3">';
     $img->displayImagesPublic();
@@ -88,8 +98,19 @@ foreach($listImages as $img) {
     }
 
 }
+
 ?>
 </div>
+
+<?php if ($page > 1) { ?>
+    <a href="#" id="prev" class="pagin">Prev</a>
+<?php } ?>
+    <p>Page <?php echo $_GET['page']?></p>
+    <?php if (count($listImages) == 6) { ?>
+    <a href="#" id="next" class="pagin">Next</a>
+    <?php } ?>
+
+
 <?php
 if (isset($_POST['newImage'])) {
     header('location: takePicture.php');
@@ -114,6 +135,26 @@ if (isset($_POST['newImage'])) {
         Array.from(document.querySelectorAll('.images'))
             .forEach(initElement)
    })()
+
+   if ((paginN = document.getElementById("next")) !== null) {
+        paginN.addEventListener("click", paginNext)
+        function paginNext(event) {
+            var pathName = window.location.pathname
+            var newUrl = pathName + "?page=<?php echo intval($_GET['page']) + 1; ?>"
+            console.log(newUrl);
+            window.location.assign(newUrl)
+        }
+   }
+
+   if ((paginP = document.getElementById("prev")) !== null) {
+        paginP.addEventListener("click", paginPrev)
+        function paginPrev(event) {
+            var pathName = window.location.pathname
+            var newUrl = pathName + "?page=<?php echo intval($_GET['page']) - 1; ?>"
+            console.log(newUrl);
+            window.location.assign(newUrl)
+        }
+   }
 </script>
 
 </body>

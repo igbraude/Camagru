@@ -58,8 +58,8 @@ var_dump($_POST);
     <h1><a href="./session.php">Camagru</a></h1>
 
     <nav>
-        <a href="./showImages.php">My Gallery</a>
-        <a href="./showImagesPublic.php">Public Gallery</a>
+        <a href="./showImages.php?page=1">My Gallery</a>
+        <a href="./showImagesPublic.php?page=1">Public Gallery</a>
         <a href="./takePicture.php">Take Picture</a>
         <a href="./setting.php">Settings</a>
         <input type="hidden" name="logout" value="">
@@ -70,7 +70,7 @@ var_dump($_POST);
 
 </header>
 
-<a href="<?php if ($_POST['Gallery'] == "Public") { echo "./showImagesPublic.php";} else { echo "./showImages.php"; } ?>">Back to Gallery</a>
+<a href="<?php if ($_POST['Gallery'] == "Public") { echo "./showImagesPublic.php?page=1";} else { echo "./showImages.php?page=1"; } ?>">Back to Gallery</a>
 <img alt="img" src="<?php echo $_SESSION['img_path'] ?>" width="200" height="200">
 <form method="post">
         <textarea rows="12" cols="60" name="commentaryField" id="commentaryField"></textarea>
