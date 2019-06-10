@@ -49,7 +49,7 @@ CREATE TRIGGER `like` AFTER DELETE
    SET `image`.`like` = `image`.`like` - 1
    WHERE `image_id`= NEW.`image_id`;
 
----> Delete triiger
+---> Delete triger
 DROP TRIGGER `like`;
 
 ---> check

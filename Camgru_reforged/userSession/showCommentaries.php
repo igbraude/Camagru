@@ -35,7 +35,6 @@ else {
     echo '<br>yes<br>';
 }
 
-var_dump($_POST);
 
 ?>
 
@@ -84,18 +83,26 @@ var_dump($_POST);
 
 <div id="likeNdislike">
     <?php $like = getLike();  ?>
-        <p>like : <?php echo $like['like'];?></p>
         <?php
         if (user_like() == FALSE) {
         ?>
-            <div id="like">
-            <input type="hidden" name="check" value="check">
+        <div id="like">
+            <p>like : <?php echo $like['like'];?></p>
+            <input type="hidden" id="imgPath" name="imgPath" value="<?php echo $_POST['imgPath']; ?>">
+            <input type="hidden" id="Gallery" name="Gallery" value="<?php echo $_POST['Gallery']; ?>">
+            <input type="hidden" id="img_id" name="img_id" value="<?php echo $_POST['img_id']; ?>">
             <button type="button" onclick="likeButton()">Like</button>
             </div>
+            </form>
     <?php } else { ?>
-            <div id="dislike">
+    
+        <div id="dislike">
+            <p>like : <?php echo $like['like'];?></p>
+            <input type="hidden" id="imgPath" name="imgPath" value="<?php echo $_POST['imgPath']; ?>">
+            <input type="hidden" id="Gallery" name="Gallery" value="<?php echo $_POST['Gallery']; ?>">
+            <input type="hidden" id="img_id" name="img_id" value="<?php echo $_POST['img_id']; ?>">
             <button type="button" onclick="dislikeButton()">DisLike</button>
-            </div>
+        </div>
     <?php } ?>
 </div>
 
@@ -170,31 +177,39 @@ var_dump($_POST);
     })()
     
     function likeButton() {
+        var data = new FormData()
+        data.append("imgPath", document.getElementById("imgPath").value)
+        data.append("img_id", document.getElementById("img_id").value)
+
 
         var xhttp = new XMLHttpRequest()
 
         xhttp.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
-                document.getElementById("like").innerHTML = this.responseText;
-                console.log(this.responseText)
+                document.getElementById("likeNdislike").innerHTML = this.responseText;
+                //console.log(this.responseText)
             }
         }
-        xhttp.open("GET", "likeDislike.php")
-        <?php //like_data(); ?>
-        xhttp.send();
+        xhttp.open("POST", "likeButton.php", true)
+
+        xhttp.send(data);
     }
 
     function dislikeButton() {
+        var data = new FormData()
+        data.append("imgPath", document.getElementById("imgPath").value)
+        data.append("img_id", document.getElementById("img_id").value)
+
         var xhttp = new XMLHttpRequest()
         xhttp.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
-                document.getElementById("dislike").innerHTML = this.responseText;
-                console.log(this.responseText)
+                document.getElementById("likeNdislike").innerHTML = this.responseText;
+               //console.log(this.responseText)
             }
         }
-        xhttp.open("GET", "likeDislike.php")
-        <?php //dislike_data(); ?>
-        xhttp.send();
+        xhttp.open("POST", "dislikeButton.php", true)
+
+        xhttp.send(data);
     }
 </script>
 </body>

@@ -3,9 +3,7 @@
     function user_like() {
         include("../config/database-setup.php");
         $likeObject = [];
-        $query = sprintf("SELECT * FROM `likeDislike` AS l
-        INNER JOIN `image` AS i
-        ON i.`image_id`= l.`image_id` AND l.`image_id` = %d AND l.`username`= '%s'", $_POST['img_id'], $_SESSION['username']);
+        $query = sprintf("SELECT * FROM `likeDislike` WHERE `image_id` = %d AND `username` = '%s'", $_POST['img_id'], $_SESSION['username']);
         $stmt = $conn->prepare($query);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_BOTH);
@@ -34,8 +32,6 @@
         VALUE (%d, '%s', 'Y', 'N')", $_POST['img_id'], $_SESSION['username']);
         $stmt = $conn->prepare($query);
         $stmt->execute();
-        
-
     }
 
     function dislike_data() {
