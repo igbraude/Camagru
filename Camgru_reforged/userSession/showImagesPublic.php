@@ -37,7 +37,6 @@ function getImages() {
     return ($imgObject);
 }
 
-var_dump($_GET);
 
 ?>
 

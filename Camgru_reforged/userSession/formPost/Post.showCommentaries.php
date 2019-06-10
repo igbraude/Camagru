@@ -23,7 +23,7 @@ include("../Class/Class.commentary.php");
 include('../config/database-setup.php');
 
 if(isset($_POST['postCommentary'])) {
-    $com = new Commentary($_POST['commentaryField'], $_SESSION['username'], $_SESSION['image_id']);
+    $com = new Commentary($_POST['commentaryField'], $_SESSION['username'], $_POST['img_id']);
     $com->addInDatabase();
 }
 
@@ -40,13 +40,6 @@ if (isset($_POST['action']) && $_POST['action'] == "edit") {
     $stmt = $conn->prepare($query);
     $stmt->execute();
 } 
-
-if (isset($_POST['img_id'])) {
-    $_SESSION['image_id'] = $_POST['img_id'];
-}
-if (isset($_POST['imgPath'])) {
-    $_SESSION['img_path'] = $_POST['imgPath'];
-}
 
 if (isset($_GET['logout'])) {
     header("location: logout.php");

@@ -5,16 +5,17 @@
         Display the image pointed by the user.
         Create new object for a commentary of an image and display it (commentary), loop foreach commentary.
         User can create, edit, delete his own commentaries.
+        User can like or dislike the picture.
 */
 
 include("./formPost/Post.showCommentaries.php");
-
+include("../function/databaseRequest.php");
 function getCommentaries() {
 
     global $conn;
     $commentaryObject = [];
 
-    $query = sprintf("SELECT * FROM `commentary` WHERE `image_id`=%d;", $_SESSION['image_id']);
+    $query = sprintf("SELECT * FROM `commentary` WHERE `image_id`=%d;", $_POST['img_id']);
     foreach($conn->query($query) as $row) {
         $com = new Commentary($row['message'], $row['username'], $row['image_id'], $row['commentary_id']);
         if ($commentaryObject == null) {
@@ -26,6 +27,14 @@ function getCommentaries() {
     }
     return ($commentaryObject);
 }
+
+if (user_like() == FALSE) {
+    echo '<br>BLA<br>';
+}
+else {
+    echo '<br>yes<br>';
+}
+
 var_dump($_POST);
 
 ?>
@@ -71,17 +80,62 @@ var_dump($_POST);
 </header>
 
 <a href="<?php if ($_POST['Gallery'] == "Public") { echo "./showImagesPublic.php?page=1";} else { echo "./showImages.php?page=1"; } ?>">Back to Gallery</a>
-<img alt="img" src="<?php echo $_SESSION['img_path'] ?>" width="200" height="200">
+<img alt="img" src="<?php echo $_POST['imgPath'] ?>" width="200" height="200">
+
+<div id="likeNdislike">
+    <?php $like = getLike();  ?>
+        <p>like : <?php echo $like['like'];?></p>
+        <?php
+        if (user_like() == FALSE) {
+        ?>
+            <div id="like">
+            <input type="hidden" name="check" value="check">
+            <button type="button" onclick="likeButton()">Like</button>
+            </div>
+    <?php } else { ?>
+            <div id="dislike">
+            <button type="button" onclick="dislikeButton()">DisLike</button>
+            </div>
+    <?php } ?>
+</div>
+
+
 <form method="post">
+        <input type="hidden" name="imgPath" value="<?php echo $_POST['imgPath']; ?>">
+        <input type="hidden" name="Gallery" value="<?php echo $_POST['Gallery']; ?>">
+        <input type="hidden" name="img_id" value="<?php echo $_POST['img_id']; ?>">
         <textarea rows="12" cols="60" name="commentaryField" id="commentaryField"></textarea>
        <button class="post" name="postCommentary" id="postCommentary">Post</button>
 </form>
+
     <?php
         $listComment = getCommentaries();
 
         foreach($listComment as $comment) {
+
             $comment->displayCommentaries();
+            if ($_SESSION['username'] == $comment->username) {
+                ?>
+                <form class="comment" method="post">
+                <input type="hidden" name="id" value="<?php echo $comment->id;?>">
+                <input type="hidden" name="action" value="">
+                <div class="content"><p><?php echo $comment->text; ?></p>
+                <input type="hidden" name="imgPath" value="<?php echo $_POST['imgPath']; ?>">
+                <input type="hidden" name="Gallery" value="<?php echo $_POST['Gallery']; ?>">
+                <input type="hidden" name="img_id" value="<?php echo $_POST['img_id']; ?>">
+                <a href="#" class="comment-delete">delete</a>
+                <a href="#" class="comment-edit">edit</a> 
+                </div>
+                </form>
+                <?php
         }
+        else {
+            echo '<div class="contentOther"><p>'. $comment->text .'</p></div>';
+        }
+        echo "<br>";
+
+
+    }
     ?>
 <script>
     (() => {
@@ -97,6 +151,9 @@ var_dump($_POST);
                 element.querySelector('input[name="action"]').value = "edit"
                 element.querySelector('.content').innerHTML = `
                     <div class="content">
+                    <input type="hidden" name="imgPath" value="<?php echo $_POST['imgPath']; ?>">
+                    <input type="hidden" name="Gallery" value="<?php echo $_POST['Gallery']; ?>">
+                    <input type="hidden" name="img_id" value="<?php echo $_POST['img_id']; ?>">
                         <textarea name="content">${element.querySelector('.content > p').textContent}</textarea>
                         <button type="submit">Submit</button> | <a href="#" id="cancel">Cancel</a>
                     </div>
@@ -111,6 +168,34 @@ var_dump($_POST);
         Array.from(document.querySelectorAll('.comment'))
             .forEach(initElement)
     })()
+    
+    function likeButton() {
+
+        var xhttp = new XMLHttpRequest()
+
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("like").innerHTML = this.responseText;
+                console.log(this.responseText)
+            }
+        }
+        xhttp.open("GET", "likeDislike.php")
+        <?php //like_data(); ?>
+        xhttp.send();
+    }
+
+    function dislikeButton() {
+        var xhttp = new XMLHttpRequest()
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("dislike").innerHTML = this.responseText;
+                console.log(this.responseText)
+            }
+        }
+        xhttp.open("GET", "likeDislike.php")
+        <?php //dislike_data(); ?>
+        xhttp.send();
+    }
 </script>
 </body>
 

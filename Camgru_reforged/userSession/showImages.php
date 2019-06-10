@@ -12,8 +12,15 @@ include("./formPost/Post.showImages.php");
 function getImages() {
     global $conn;
     $imgObject = [];
+    global $page;
+    if (isset($_GET['page'])) {
+        $page = intval($_GET['page']);
+        if ($page <= 1) {
+            $page = 1;
+        }
+    }
 
-    $query = sprintf('SELECT * FROM `image` WHERE `username`="%s"',$_SESSION['username']);
+    $query = sprintf('SELECT * FROM `image` WHERE `username`="%s" LIMIT 6 OFFSET '. (($page - 1) * 6), $_SESSION['username']);
     foreach($conn->query($query) as $row) {
         $img = new Images($row['image_id'], $row['username'], $row['path'], $row['like'], $row['dislike'], $row['private']);
         if ($imgObject == null) {
@@ -39,8 +46,6 @@ function getImages() {
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
-<title>User Dropdown Header</title>
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 <link rel="stylesheet" href="css/header-user-dropdown.css">
@@ -68,20 +73,34 @@ function getImages() {
 </div>
 
 </header>
+<div class="row">
 <?php
-
+$i = 0;
 $listImages = getImages();
 
 foreach($listImages as $img) {
+    echo '<div class="col-sm-3">';
     $img->displayImages();
+    echo '</div>';
+    $i++;
+    if ($i % 3 == 0) {
+        echo '<div class="w-100"></div>';
+    }
+
 }
 
 ?>
+</div>
 
+<?php if ($page > 1) { ?>
+    <a href="#" id="prev" class="pagin">Prev</a>
+<?php } ?>
+    <p>Page <?php echo $_GET['page']?></p>
+    <?php if (count($listImages) == 6) { ?>
+    <a href="#" id="next" class="pagin">Next</a>
+    <?php } ?>
 
-<form method="get" action="takePicture.php">
-    <button type="submit" class="newImage" name="newImage">Add new picture</button>
-</form>
+</div>
 
 <script>
 
@@ -106,6 +125,26 @@ foreach($listImages as $img) {
         Array.from(document.querySelectorAll('.images'))
             .forEach(initElement)
    })()
+
+   if ((paginN = document.getElementById("next")) !== null) {
+        paginN.addEventListener("click", paginNext)
+        function paginNext(event) {
+            var pathName = window.location.pathname
+            var newUrl = pathName + "?page=<?php echo intval($_GET['page']) + 1; ?>"
+            console.log(newUrl);
+            window.location.assign(newUrl)
+        }
+   }
+
+   if ((paginP = document.getElementById("prev")) !== null) {
+        paginP.addEventListener("click", paginPrev)
+        function paginPrev(event) {
+            var pathName = window.location.pathname
+            var newUrl = pathName + "?page=<?php echo intval($_GET['page']) - 1; ?>"
+            console.log(newUrl);
+            window.location.assign(newUrl)
+        }
+   }
 </script>
 
 </body>

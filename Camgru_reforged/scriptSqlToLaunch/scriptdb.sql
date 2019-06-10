@@ -25,3 +25,53 @@ CREATE TABLE IF NOT EXISTS `commentary` (
     `image_id` INT NOT NULL,
     `message` TEXT NOT NULL
 );
+
+
+CREATE TABLE IF NOT EXISTS `likeDislike`(
+	`image_id` INT NOT NULL,
+    `username` VARCHAR(80),
+    `like` ENUM('N', 'Y'),
+    `dislike` ENUM('N', 'Y')
+);
+
+delimiter ;
+----> trigger for likes
+CREATE TRIGGER `like` AFTER INSERT
+   ON `likeDislike` FOR EACH ROW
+   UPDATE `image`
+   SET `image`.`like` = `image`.`like` + 1
+   WHERE `image_id`= NEW.`image_id`;
+
+---> trigger on dislike
+CREATE TRIGGER `like` AFTER DELETE
+   ON `likeDislike` FOR EACH ROW
+   UPDATE `image`
+   SET `image`.`like` = `image`.`like` - 1
+   WHERE `image_id`= NEW.`image_id`;
+
+---> Delete triiger
+DROP TRIGGER `like`;
+
+---> check
+UPDATE `likeDislike` SET `like`="N" WHERE `image_id`="3";
+---> insert
+INSERT INTO `likeDislike`(`image_id`, `username`, `like`, `dislike`)
+VALUE (3, "check", "Y", "N");
+
+
+---> Good select to see if the photo is liked
+SELECT * FROM `likeDislike` AS l
+INNER JOIN `image` AS i
+ON i.`image_id`= l.`image_id` AND l.`image_id` = 3 AND l.`username`="root";
+--->select
+SELECT `image`.`image_id`, `image`.`username` FROM `image` INNER JOIN `likeDislike`
+WHERE `image`.`image_id` = `likeDislike`.`image_id`
+AND `image`.`username` = `likeDislike`.`username`;
+
+SELECT `image`.`image_id`, `image`.`username`, `likeDislike`.`like`, `likeDislike`.`dislike`
+FROM `image` INNER JOIN `likeDislike`
+ON `image`.`image_id`=`likeDislike`.`image_id` AND `image`.`username`=`likeDislike`.`username`;
+
+SELECT `likeDislike`.`image_id`, `image`.`username`, `likeDislike`.`like`, `likeDislike`.`dislike`
+FROM `image` INNER JOIN `likeDislike`
+ON `image`.`username`=`likeDislike`.`username`;
