@@ -18,7 +18,7 @@ include("./formPost/Post.login.php");
             header("location: $pageStore"); // Reddirection to profile page
         }
     }
-
+var_dump($_POST);
 ?>
 <!DOCTYPE html>
 <html>
@@ -44,7 +44,7 @@ include("./formPost/Post.login.php");
     <h1><a href="#">Camagru</a></h1>
 
     <ul>
-        <li><a href="#">Forgot Password ?</a></li>
+        <li><a href="forgotPasswordtext.php">Forgot Password ?</a></li>
         <li><a href="register.php">Sign up</a></li>
     </ul>
 

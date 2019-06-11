@@ -20,12 +20,12 @@ if (isset($_POST['signUp'])) {
         include('../config/database-setup.php');
 
         $sQuery = "SELECT `user_id`, `username`, `password` FROM `user` WHERE email = ?";
-        $iQuery = "INSERT INTO `user` (username, email, `password`) value (?, ?, ?)";
+        $iQuery = "INSERT INTO `user` (username, email, `password`, `active`) value (?, ?, ?, ?)";
 
         $stmt = $conn->prepare($sQuery);
         $stmt->execute([$email]);
-        $result = $stmt->fetch(PDO::FETCH_OBJ);
-        if ($result->username == $fullName) {
+        $result = $stmt->fetch(PDO::FETCH_BOTH);
+        if ($result['username'] == $fullName) {
             echo "This user already exists";
         }
         else {
@@ -34,14 +34,39 @@ if (isset($_POST['signUp'])) {
             array(
                 $fullName,
                 $email,
-                $hash
+                $hash,
+                "N"
             )
         );
-        $validAccount = 1;
-        }
+            $validAccount = 1;
+            $to      = $email; // Send email to our user
+            $subject = 'Signup | Verification'; // Give the email a subject 
+            $message = '
+            
+            Thanks for signing up!
+            Your account has been created, you can login with the following credentials after you have activated your account by pressing the url below.
+            
+            ------------------------
+            Username: '.$fullName.'
+            Password: '.$password.'
+            ------------------------
+            
+            Please click this link to activate your account:
+            localhost:8008/Archive/Camagru/Camagru/Camgru_reforged/loginSystem/verifyEmail.php?username='.$fullName.'&hash='.$hash.'
+            
+            '; // Our message above including the link
+                                
+            $headers = 'From:noreply@Camagru.fr' . "\r\n"; // Set from headers
+            //echo $to . "\n" . $subject . "\n" . $message . "\n" . $fullName . "\n" . $password . "\n" . $email . "\n" . $hash . "\n" . $headers;
+            $validMail = mail($email, $subject, $message, $headers);
+            if ($validMail = TRUE) {
+                echo "check mail !!";}
+            else {
+                echo "fail mail";}
+            }
     }
 }
-if ($validAccount == 1) {
-    header("location: login.php");
-}
+// if ($validAccount == 1) {
+//     header("location: login.php");
+// }
 ?>

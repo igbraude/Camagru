@@ -8,6 +8,7 @@ if(isset($_SESSION['login_id'])) {
         header("location: $pageStore");
     }
 }
+var_dump($_POST);
 ?>
 <!DOCTYPE html>
 <html>
@@ -33,7 +34,7 @@ if(isset($_SESSION['login_id'])) {
     <h1><a href="#">Camagru</a></h1>
 
     <ul>
-        <li><a href="#">Forgot Password ?</a></li>
+        <li><a href="forgotPasswordtext.php">Forgot Password ?</a></li>
         <li><a href="login.php">Sign in</a></li>
     </ul>
 
@@ -68,7 +69,7 @@ if(isset($_SESSION['login_id'])) {
                     <div class="form-row">
                         <label>
                             <span>Password</span>
-                            <input type="password" name="newPassword" =id="newPass" required>
+                            <input type="password" name="newPassword" id="newPass" required>
                         </label>
                     </div>
 

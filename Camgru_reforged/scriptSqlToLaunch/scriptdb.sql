@@ -5,7 +5,8 @@ CREATE TABLE IF NOT EXISTS `user` (
     `user_id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `username` VARCHAR(80) NOT NULL,
     `email` VARCHAR(80) NOT NULL,
-    `password` VARCHAR(80) NOT NULL
+    `password` VARCHAR(80) NOT NULL,
+    `active` ENUM('N', 'Y')
 );
 
 CREATE TABLE IF NOT EXISTS `image`(
@@ -34,7 +35,6 @@ CREATE TABLE IF NOT EXISTS `likeDislike`(
     `dislike` ENUM('N', 'Y')
 );
 
-delimiter ;
 ----> trigger for likes
 CREATE TRIGGER `like` AFTER INSERT
    ON `likeDislike` FOR EACH ROW
@@ -43,13 +43,18 @@ CREATE TRIGGER `like` AFTER INSERT
    WHERE `image_id`= NEW.`image_id`;
 
 ---> trigger on dislike
-CREATE TRIGGER `like` AFTER DELETE
+CREATE TRIGGER `unlike` AFTER DELETE
    ON `likeDislike` FOR EACH ROW
    UPDATE `image`
    SET `image`.`like` = `image`.`like` - 1
-   WHERE `image_id`= NEW.`image_id`;
+   WHERE `image_id`= OLD.`image_id`;
 
----> Delete triger
+
+--------------------------------------------------------------------------------------------
+
+
+DELETE FROM `likeDislike` WHERE `image_id`= 33;
+---> Delete triiger
 DROP TRIGGER `like`;
 
 ---> check

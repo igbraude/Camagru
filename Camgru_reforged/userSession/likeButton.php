@@ -11,7 +11,8 @@ like_data();
 <html>
 <body>
 
-<p>you liked this photo !!</p>
+<?php $like = getLike();  ?>
+<p>like : <?php echo $like['like'];?></p>
 <form method="get" class="dislikeForm">
 <div id="likeNdislike">
 <input type="hidden" id="imgPath" name="imgPath" value="<?php echo $_POST['imgPath']; ?>">

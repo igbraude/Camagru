@@ -28,14 +28,6 @@ function getCommentaries() {
     return ($commentaryObject);
 }
 
-if (user_like() == FALSE) {
-    echo '<br>BLA<br>';
-}
-else {
-    echo '<br>yes<br>';
-}
-
-
 ?>
 
 <!DOCTYPE html>
@@ -101,7 +93,7 @@ else {
             <input type="hidden" id="imgPath" name="imgPath" value="<?php echo $_POST['imgPath']; ?>">
             <input type="hidden" id="Gallery" name="Gallery" value="<?php echo $_POST['Gallery']; ?>">
             <input type="hidden" id="img_id" name="img_id" value="<?php echo $_POST['img_id']; ?>">
-            <button type="button" onclick="dislikeButton()">DisLike</button>
+            <button type="button" onclick="dislikeButton()">Dislike</button>
         </div>
     <?php } ?>
 </div>
