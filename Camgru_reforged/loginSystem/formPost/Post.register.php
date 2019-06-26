@@ -26,7 +26,7 @@ if (isset($_POST['signUp'])) {
         $stmt->execute([$email]);
         $result = $stmt->fetch(PDO::FETCH_BOTH);
         if ($result['username'] == $fullName) {
-            echo "This user already exists";
+            echo "<script> alert('This user already exists') </script>";
         }
         else {
         $stmt = $conn->prepare($iQuery);
@@ -39,34 +39,44 @@ if (isset($_POST['signUp'])) {
             )
         );
             $validAccount = 1;
-            $to      = $email; // Send email to our user
-            $subject = 'Signup | Verification'; // Give the email a subject 
-            $message = '
+            $to      = $fullName + "<" + $email + ">"; // Send email to our user
+            $subject = 'Signup | Verification'; // Give the email a subject
+            $message = "check\r\n"; 
+            // $message = '
             
-            Thanks for signing up!
-            Your account has been created, you can login with the following credentials after you have activated your account by pressing the url below.
+            // Thanks for signing up!
+            // Your account has been created, you can login with the following credentials after you have activated your account by pressing the url below.
             
-            ------------------------
-            Username: '.$fullName.'
-            Password: '.$password.'
-            ------------------------
+            // ------------------------
+            // Username: '.$fullName.'
+            // Password: '.$password.'
+            // ------------------------
             
-            Please click this link to activate your account:
-            localhost:8008/Archive/Camagru/Camagru/Camgru_reforged/loginSystem/verifyEmail.php?username='.$fullName.'&hash='.$hash.'
+            // Please click this link to activate your account:
+            // localhost:8008/Archive/Camagru/Camagru/Camgru_reforged/loginSystem/verifyEmail.php?username='.$fullName.'&hash='.$hash.'
             
-            '; // Our message above including the link
+            // '; // Our message above including the link
                                 
             $headers = 'From:noreply@Camagru.fr' . "\r\n"; // Set from headers
             //echo $to . "\n" . $subject . "\n" . $message . "\n" . $fullName . "\n" . $password . "\n" . $email . "\n" . $hash . "\n" . $headers;
-            $validMail = mail($email, $subject, $message, $headers);
-            if ($validMail = TRUE) {
-                echo "check mail !!";}
-            else {
-                echo "fail mail";}
+            $validMail = mail("igorbraudel@gmail.com", 'helo', $message, $headers);
+            if (!$validMail) {
+                // $errorMessage = error_get_last()['message'];
+                echo "error";
+                print_r(error_get_last());
             }
+            else {
+                echo "check";
+            }
+            // if ($validMail == TRUE) {
+            //     echo $to;
+            //     echo "check mail !!";}
+            // else {
+            //     echo "fail mail";}
+            // }
     }
 }
 // if ($validAccount == 1) {
 //     header("location: login.php");
-// }
+ }
 ?>
