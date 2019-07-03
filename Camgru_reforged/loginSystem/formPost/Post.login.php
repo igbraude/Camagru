@@ -17,15 +17,23 @@ if (isset($_POST['signIn'])) {
         $username = $_POST['username'];
         $password = $_POST['password'];
         include('../config/database-setup.php');
-        $stmt = $conn->prepare("SELECT `user_id`, `username`, `password` FROM `user` WHERE `username` = ?");
+        $stmt = $conn->prepare("SELECT `user_id`, `username`, `password`, `active` FROM `user` WHERE `username` = ?");
         $stmt->execute([$username]);
         if ($result = $stmt->fetch(PDO::FETCH_OBJ)) {
-            if (password_verify($password, $result->password))
+            if (password_verify($password, $result->password) && $result->active == 'Y')
             {
                  $conn = NULL;
                  $_SESSION['username'] =  $username;
+                 echo "hello";
                 header('location: ../userSession/session.php');
              }
+             else if ($result->active == "N") {
+                 echo "Account not verified, please check your mail.";
+             }
+             else {
+                 echo "Username or Password not valid";
+             }
+
         }
         else {
             echo "Username or Password not valid";

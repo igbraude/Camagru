@@ -38,28 +38,33 @@ if (isset($_POST['signUp'])) {
                 "N"
             )
         );
+            $url = str_replace("register.php", "verifyEmail.php",$_SERVER['HTTP_REFERER']);
             $validAccount = 1;
             $to      = $fullName + "<" + $email + ">"; // Send email to our user
             $subject = 'Signup | Verification'; // Give the email a subject
-            $message = "check\r\n"; 
-            // $message = '
+            $message = '
             
-            // Thanks for signing up!
-            // Your account has been created, you can login with the following credentials after you have activated your account by pressing the url below.
+            Thanks for signing up!
+            Your account has been created, you can login with the following credentials after you have activated your account by pressing the url below.
+            <br>
+            <br>------------------------
+            <br>Username: '.$fullName.'
+            <br>Password: '.$password.'
+            <br>------------------------
+            <br>
+            <br>Please click this link to activate your account:
+            <br><a href="'. $url .'?username='.$fullName.'&hash='.$hash.'">Valid Account here</a>
             
-            // ------------------------
-            // Username: '.$fullName.'
-            // Password: '.$password.'
-            // ------------------------
-            
-            // Please click this link to activate your account:
-            // localhost:8008/Archive/Camagru/Camagru/Camgru_reforged/loginSystem/verifyEmail.php?username='.$fullName.'&hash='.$hash.'
-            
-            // '; // Our message above including the link
+            '; // Our message above including the link
                                 
             $headers = 'From:noreply@Camagru.fr' . "\r\n"; // Set from headers
             //echo $to . "\n" . $subject . "\n" . $message . "\n" . $fullName . "\n" . $password . "\n" . $email . "\n" . $hash . "\n" . $headers;
-            $validMail = mail("igorbraudel@gmail.com", 'helo', $message, $headers);
+            $headers = array("From: from@example.com",
+    "Reply-To: replyto@example.com",
+    "X-Mailer: PHP/" . PHP_VERSION
+);
+            $headers = "Content-type: text/html; charset=UTF-8";
+            $validMail = mail($email, $subject, $message, $headers);
             if (!$validMail) {
                 // $errorMessage = error_get_last()['message'];
                 echo "error";
